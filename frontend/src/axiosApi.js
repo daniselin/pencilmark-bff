@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = 'https://pencilmark2.herokuapp.com/'
+const baseURL = 'https://pencilmark2.herokuapp.com/' //https://pencilmark2.herokuapp.com/
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
@@ -8,9 +8,9 @@ const axiosInstance = axios.create({
     headers: {
         'Authorization': localStorage.getItem('access_token') ? "JWT " + localStorage.getItem('access_token') : null,
         'Content-Type': 'application/json',
-        'accept': 'application/json'
-    },
-    credentials: 'include'
+        'accept': 'application/json',
+        "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    }
 });
 
 
