@@ -1,1 +1,1 @@
-web: gunicorn pencilmark.pencilmark.wsgi
+web: gunicorn pencilmark.pencilmark.wsgi --preload --workers 1
