@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm run test",
     "build": "webpack --config webpack.config.js",
-    "start": "npm run build && python pencilmark/manage.py runserver"
+    "start": "npm run build && python manage.py runserver"
 
   },
   "repository": {
