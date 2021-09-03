@@ -22,7 +22,7 @@ class Login extends Component {
                 password: this.state.password
             });
             axiosInstance.defaults.headers['Authorization'] = "JWT " + data.access;
-            console.log(data.data)
+            console.log(data)
             localStorage.setItem('access_token', data.data.access);
             localStorage.setItem('refresh_token', data.data.refresh);
             return data;

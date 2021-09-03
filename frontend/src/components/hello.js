@@ -14,11 +14,12 @@ class Hello extends Component {
     async getMessage(){
         try {
             let response = await axiosInstance.get('/hello/');
-            console.log(response);
+            console.log(response.data);
             const message = response.data.hello;
             this.setState({
                 message: message,
             });
+            console.log("message: " + message)
             return message;
         }catch(error){
             console.log("Error: ", JSON.stringify(error, null, 4));

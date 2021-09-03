@@ -1,6 +1,10 @@
 import axios from 'axios'
 
-const baseURL = 'https://pencilmark2.herokuapp.com/' //https://pencilmark2.herokuapp.com/
+const baseURL = 'https://pencilmark2.herokuapp.com/api' 
+//https://pencilmark2.herokuapp.com/api
+//http://127.0.0.1:8000/api
+console.log(getCookie('csrftoken'));
+console.log("access_token: " + localStorage.getItem('access_token') ? "JWT " + localStorage.getItem('access_token') : null)
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
@@ -9,8 +13,8 @@ const axiosInstance = axios.create({
         'Authorization': localStorage.getItem('access_token') ? "JWT " + localStorage.getItem('access_token') : null,
         'Content-Type': 'application/json',
         'accept': 'application/json',
-        "X-CSRFToken": getCookie('csrftoken')
-    }
+        'X-CSRFToken': getCookie('csrftoken')
+    },
 });
 
 
@@ -83,7 +87,6 @@ function getCookie(name) {
             }
         }
     }
-    console.log(cookieValue)
     return cookieValue;
 }
 

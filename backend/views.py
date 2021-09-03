@@ -9,7 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import MyTokenObtainPairSerializer, CustomUserSerializer
 
-class ObtainTokenPairWithColorView(TokenObtainPairView):
+class ObtainTokenPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 class CustomUserCreate(APIView):
