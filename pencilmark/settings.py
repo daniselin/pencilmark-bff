@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import django_heroku
+import sys
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -104,16 +106,32 @@ WSGI_APPLICATION = 'pencilmark.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd57ghaaghav0bq',
-        'USER': 'igsqlsuqnutsrz',
-        'PASSWORD': 'd7e665d346a369f3afa40569fb598b41a63fba7828c84df624782b012aa089a4',
-        'HOST': 'ec2-18-211-97-89.compute-1.amazonaws.com',
-        'PORT':  '5432'
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'd26dk8a2ebv0ai',
+            'USER': 'hmexuztulkckfh',
+            'PASSWORD': '3e89949dd0319bc9b0845e82bf63df7b47be27c9c34258f8738aa43fbd8dd1b5',
+            'HOST': 'ec2-52-203-74-38.compute-1.amazonaws.com',
+            'PORT': 5432,
+            'TEST': {
+                'NAME': 'd26dk8a2ebv0ai', #This is an important entry
+            }
+        }
     }
-}
+else:
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DATABASE_NAME'),
+            'USER': os.environ.get('DATABASE_USER'),
+            'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+            'HOST': os.environ.get('DATABASE_HOST'),
+            'PORT': '5432'
+        }
+    }
 
 # Custom user model
 AUTH_USER_MODEL = "backend.CustomUser"
