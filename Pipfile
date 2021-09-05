@@ -10,6 +10,7 @@ djangorestframework-simplejwt = "*"
 gunicorn = "*"
 django-heroku = "*"
 timedelta = "*"
+dj-database-url = "*"
 
 [dev-packages]
 
