@@ -15,7 +15,6 @@ import django_heroku
 import sys
 from datetime import timedelta
 import os
-import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -110,7 +109,7 @@ WSGI_APPLICATION = 'pencilmark.wsgi.application'
 if 'test' in sys.argv:
     DATABASE_URL = 'postgres://hmexuztulkckfh:3e89949dd0319bc9b0845e82bf63df7b47be27c9c34258f8738aa43fbd8dd1b5@ec2-52-203-74-38.compute-1.amazonaws.com:5432/d26dk8a2ebv0ai'
 else:
-    DATABASE_URL = 'postgres://Rad!0head@pencilmark.chw3dhylthi3.us-east-2.rds.amazonaws.com'
+    DATABASE_URL = 'postgres://Rad!0head@pencilmark.chw3dhylthi3.us-east-2.rds.amazonaws.com:5432/sudoku'
 
 if 'test' in sys.argv:
     DATABASES = {
@@ -130,10 +129,10 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'sudoku',
-            'USER': 'postgres',
-            'PASSWORD': 'Rad!0head',
-            'HOST': 'pencilmark.chw3dhylthi3.us-east-2.rds.amazonaws.com',
+            'NAME': os.environ.get('DATABASE_NAME'),
+            'USER': os.environ.get('DATABASE_USER'),
+            'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+            'HOST': os.environ.get('DATABASE_HOST'),
             'PORT': '5432',
             'TEST': {
                 'NAME': 'sudoku'
