@@ -109,7 +109,7 @@ WSGI_APPLICATION = 'pencilmark.wsgi.application'
 if 'test' in sys.argv:
     DATABASE_URL = 'postgres://hmexuztulkckfh:3e89949dd0319bc9b0845e82bf63df7b47be27c9c34258f8738aa43fbd8dd1b5@ec2-52-203-74-38.compute-1.amazonaws.com:5432/d26dk8a2ebv0ai'
 else:
-    DATABASE_URL = 'postgres://Rad!0head@pencilmark.chw3dhylthi3.us-east-2.rds.amazonaws.com:5432/sudoku'
+    DATABASE_URL = os.environ['DATABASE_URL']
 
 if 'test' in sys.argv:
     DATABASES = {
@@ -129,14 +129,24 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('DATABASE_NAME'),
-            'USER': os.environ.get('DATABASE_USER'),
-            'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-            'HOST': os.environ.get('DATABASE_HOST'),
-            'PORT': '5432',
+            'NAME': os.environ['DATABASE_NAME'],
+            'USER': os.environ['DATABASE_USER'],
+            'PASSWORD': os.environ['DATABASE_PASSWORD'],
+            'HOST': os.environ['DATABASE_HOST'],
+            'PORT': os.environ['DATABASE_PORT'],
             'TEST': {
-                'NAME': 'sudoku'
+                'NAME': os.environ['DATABASE_NAME']
             }
+        # 'default': {
+        #     'ENGINE': 'django.db.backends.postgresql',
+        #     'NAME': os.environ.get('DATABASE_NAME'),
+        #     'USER': os.environ.get('DATABASE_USER'),
+        #     'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        #     'HOST': os.environ.get('DATABASE_HOST'),
+        #     'PORT': '5432',
+        #     'TEST': {
+        #         'NAME': 'sudoku'
+        #     }
         }
     }
 
