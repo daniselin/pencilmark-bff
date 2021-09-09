@@ -10,7 +10,9 @@ const NavigationLink = (props) => {
     } = props
 
     return (
-        <li role="presentation" className={active ? "active" : ""}><Link to={link}>{title}</Link></li>
+        <li role="presentation" className={active ? "active" : ""}>
+            <Link to={link}>{title}</Link>
+        </li>
     )
 }
 

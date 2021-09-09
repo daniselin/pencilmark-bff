@@ -1,14 +1,32 @@
 import React from "react";
 import * as PropTypes from "prop-types";
+import {actions as userActions} from "../user/index";
+import bindActionCreators from "redux";
+import NavigationLink from "./NavigationLink";
+
+const mapStateToProps = (state) => {
+    return {};
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        actions: bindActionCreators({
+            logOut: userActions.logOut
+        }, dispatch)
+    };
+};
 
 const Header = (props) => {
 
     const {
         children,
-        username
+        username,
+        actions
     } = props;
 
-    const logoutUrl = API_URL + "/logout";
+    const {
+        logOut
+    } = actions;
 
     return (
         <header>
@@ -36,7 +54,7 @@ const Header = (props) => {
                                     <i className="fa fa-angle-down"/>
                                 </a>
                                 <ul className="dropdown-menu" role="menu">
-                                    <li><a href={logoutUrl}>Logout</a></li>
+                                    <li><NavigationLink link="/login/" title="Logout" onClick={logOut}>Logout</NavigationLink></li>
                                 </ul>
                             </li>
                         </ul>
