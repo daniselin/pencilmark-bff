@@ -1,13 +1,11 @@
-from copy import Error
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import permissions
-from .serializers import MyTokenObtainPairSerializer
+from .serializers import MyTokenObtainPairSerializer, PuzzleSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.serializers import TokenVerifySerializer
 from .serializers import MyTokenObtainPairSerializer, CustomUserSerializer
 import jwt
 from django.conf import settings
@@ -22,10 +20,15 @@ class CustomUserCreate(APIView):
     def post(self, request, format='json'):
         serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
-            if user:
-                json = serializer.data
-                return Response(json, status=status.HTTP_201_CREATED)
+            try:
+                user = serializer.save()
+                if user:
+                    json = serializer.data
+                    return Response(json, status=status.HTTP_201_CREATED)
+            except Exception as error:
+                if 'username' in str(error):
+                    return Response({'error': 'username duplicate'}, status=status.HTTP_409_CONFLICT)
+            
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ObtainTokenPairWithColorView(TokenObtainPairView):
@@ -36,6 +39,12 @@ class HelloWorldView(APIView):
 
     def get(self, request):
         return Response(data={"hello":"world"}, status=status.HTTP_200_OK)
+
+class CustomUserGet(APIView):
+    def get(self, request):
+        user = request.user
+        if user.is_authenticated:
+            return Response(data={'username': user.username, 'email': user.email, 'score': user.score}, status=status.HTTP_200_OK)
 
 class LogoutAndBlacklistRefreshTokenForUserView(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -51,15 +60,21 @@ class LogoutAndBlacklistRefreshTokenForUserView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class VerifyToken(APIView):
-    permission_classes = (permissions.AllowAny,)
-    authentication_classes = ()
-    def post(self, request):
-        token = request.data["token"]
-        try:
-            valid_data = jwt.decode(token, key=settings.SECRET_KEY, algorithms=['HS256', ])
-            print(valid_data)
-            return Response(data={"isVerified": True, "user_id": valid_data["user_id"]}, status=status.HTTP_200_OK) 
-        except (jwt.exceptions.InvalidSignatureError, jwt.exceptions.DecodeError) as error: 
-            return Response(data={"isVerified": False, "code": "token_not_valids"}, status=status.HTTP_200_OK)
+    def get(self, request):
+        return Response({'tokenIsValid': True}, status=status.HTTP_200_OK)
+
+class PuzzleCreate(APIView):
+    def post(self, request, format='json'):
+        serializer = PuzzleSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                puzzle = serializer.save()
+                if puzzle:
+                    json = serializer.data
+                    return Response(json, status=status.HTTP_201_CREATED)
+            except Exception as error:
+                return Response({'error': 'puzzle name duplicate'}, status=status.HTTP_409_CONFLICT)
+            
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
             

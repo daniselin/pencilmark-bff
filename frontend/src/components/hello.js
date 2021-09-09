@@ -14,7 +14,6 @@ class Hello extends Component {
     async getMessage(){
         try {
             let response = await axiosInstance.get('/hello/');
-            console.log(response.data);
             const message = response.data.hello;
             this.setState({
                 message: message,
