@@ -86,6 +86,7 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
+    'http://pencilmark.herokuapp.com'
 )
 
 CSRF_COOKIE_NAME = "csrftoken"
