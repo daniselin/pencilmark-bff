@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import CustomUser, Puzzle
 from django.db import transaction
 
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -11,6 +12,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add custom claims
         token['score'] = user.score
         return token
+
 
 class CustomUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
@@ -42,6 +44,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Username duplicate")
         return value
 
+
 class PuzzleSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
     creator = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), required=True)
@@ -56,7 +59,9 @@ class PuzzleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Puzzle
-        fields = ('name', 'creator', 'date', 'given_digits', 'cell_colors', 'average_solve_time', 'completed', 'rule_set', 'average_rating', 'diagonals')
+        fields = (
+            'name', 'creator', 'date', 'given_digits', 'cell_colors', 'average_solve_time', 'completed', 'rule_set',
+            'average_rating', 'diagonals')
 
     def create(self, validated_data):
         instance = self.Meta.model(**validated_data)

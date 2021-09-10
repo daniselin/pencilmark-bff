@@ -12,6 +12,8 @@ django-heroku = "*"
 timedelta = "*"
 dj-database-url = "*"
 sqlalchemy = "*"
+django-environ = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 

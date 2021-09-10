@@ -43,8 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'backend',
-    'frontend',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist'
 ]
@@ -80,7 +80,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+)
+
+CSRF_COOKIE_NAME = "csrftoken"
 
 ROOT_URLCONF = 'pencilmark.urls'
 
@@ -109,7 +117,7 @@ WSGI_APPLICATION = 'pencilmark.wsgi.application'
 if 'test' in sys.argv:
     DATABASE_URL = 'postgres://hmexuztulkckfh:3e89949dd0319bc9b0845e82bf63df7b47be27c9c34258f8738aa43fbd8dd1b5@ec2-52-203-74-38.compute-1.amazonaws.com:5432/d26dk8a2ebv0ai'
 else:
-    DATABASE_URL = os.environ['DATABASE_URL']
+    DATABASE_URL = "postgres://postgres:Rad!0head@pencilmark.chw3dhylthi3.us-east-2.rds.amazonaws.com:5432/sudoku" #os.environ['DATABASE_URL']
 
 if 'test' in sys.argv:
     DATABASES = {
@@ -129,13 +137,13 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ['DATABASE_NAME'],
-            'USER': os.environ['DATABASE_USER'],
-            'PASSWORD': os.environ['DATABASE_PASSWORD'],
-            'HOST': os.environ['DATABASE_HOST'],
-            'PORT': os.environ['DATABASE_PORT'],
+            'NAME': 'sudoku', #os.environ['DATABASE_NAME'],
+            'USER': 'postgres', #os.environ['DATABASE_USER'],
+            'PASSWORD': 'Rad!0head', #os.environ['DATABASE_PASSWORD'],
+            'HOST': 'pencilmark.chw3dhylthi3.us-east-2.rds.amazonaws.com', #os.environ['DATABASE_HOST'],
+            'PORT': 5432, #os.environ['DATABASE_PORT'],
             'TEST': {
-                'NAME': os.environ['DATABASE_NAME']
+                'NAME': 'sudoku', #os.environ['DATABASE_NAME']
             }
         # 'default': {
         #     'ENGINE': 'django.db.backends.postgresql',
