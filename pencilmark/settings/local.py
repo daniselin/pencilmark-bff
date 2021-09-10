@@ -141,26 +141,26 @@ if 'test' in sys.argv:
     }
 else:
     DATABASES = {
-        # 'default': {
-        #     'ENGINE': 'django.db.backends.postgresql',
-        #     'NAME': env('DATABASE_NAME'),
-        #     'USER': env('DATABASE_USER'), #os.environ['DATABASE_USER'],
-        #     'PASSWORD': env('DATABASE_PASSWORD'), #os.environ['DATABASE_PASSWORD'],
-        #     'HOST': env('DATABASE_HOST'), #os.environ['DATABASE_HOST'],
-        #     'PORT': env('DATABASE_PORT'), #os.environ['DATABASE_PORT'],
-        #     'TEST': {
-        #         'NAME': env('DATABASE_NAME'), #os.environ['DATABASE_NAME']
-        #     }
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('DATABASE_NAME'),
-            'USER': os.environ.get('DATABASE_USER'),
-            'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-            'HOST': os.environ.get('DATABASE_HOST'),
-            'PORT': '5432',
+            'NAME': env('DATABASE_NAME'),
+            'USER': env('DATABASE_USER'), #os.environ['DATABASE_USER'],
+            'PASSWORD': env('DATABASE_PASSWORD'), #os.environ['DATABASE_PASSWORD'],
+            'HOST': env('DATABASE_HOST'), #os.environ['DATABASE_HOST'],
+            'PORT': env('DATABASE_PORT'), #os.environ['DATABASE_PORT'],
             'TEST': {
-                'NAME': os.environ.get('DATABASE_NAME')
+                'NAME': env('DATABASE_NAME'), #os.environ['DATABASE_NAME']
             }
+        # 'default': {
+        #     'ENGINE': 'django.db.backends.postgresql',
+        #     'NAME': os.environ.get('DATABASE_NAME'),
+        #     'USER': os.environ.get('DATABASE_USER'),
+        #     'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        #     'HOST': os.environ.get('DATABASE_HOST'),
+        #     'PORT': '5432',
+        #     'TEST': {
+        #         'NAME': os.environ.get('DATABASE_NAME')
+        #     }
         }
     }
 
