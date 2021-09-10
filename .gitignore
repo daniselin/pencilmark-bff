@@ -24,7 +24,7 @@ media
 *.bak 
 
 # Environments 
-.env 
+pencilmark/.env
 .venv 
 env/ 
 venv/ 

@@ -15,6 +15,10 @@ import django_heroku
 import sys
 from datetime import timedelta
 import os
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,10 +28,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@dc(wm5$m860t_@_(_r=7u-_rq5s!&yun+shix=fhoml8ha$9-'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -118,7 +122,7 @@ WSGI_APPLICATION = 'pencilmark.wsgi.application'
 if 'test' in sys.argv:
     DATABASE_URL = 'postgres://hmexuztulkckfh:3e89949dd0319bc9b0845e82bf63df7b47be27c9c34258f8738aa43fbd8dd1b5@ec2-52-203-74-38.compute-1.amazonaws.com:5432/d26dk8a2ebv0ai'
 else:
-    DATABASE_URL = "postgres://postgres:Rad!0head@pencilmark.chw3dhylthi3.us-east-2.rds.amazonaws.com:5432/sudoku" #os.environ['DATABASE_URL']
+    DATABASE_URL = env('DATABASE_URL')#"postgres://postgres:Rad!0head@pencilmark.chw3dhylthi3.us-east-2.rds.amazonaws.com:5432/sudoku"
 
 if 'test' in sys.argv:
     DATABASES = {
@@ -138,13 +142,13 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'sudoku', #os.environ['DATABASE_NAME'],
-            'USER': 'postgres', #os.environ['DATABASE_USER'],
-            'PASSWORD': 'Rad!0head', #os.environ['DATABASE_PASSWORD'],
-            'HOST': 'pencilmark.chw3dhylthi3.us-east-2.rds.amazonaws.com', #os.environ['DATABASE_HOST'],
-            'PORT': 5432, #os.environ['DATABASE_PORT'],
+            'NAME': env('DATABASE_NAME'),
+            'USER': env('DATABASE_USER'), #os.environ['DATABASE_USER'],
+            'PASSWORD': env('DATABASE_PASSWORD'), #os.environ['DATABASE_PASSWORD'],
+            'HOST': env('DATABASE_HOST'), #os.environ['DATABASE_HOST'],
+            'PORT': env('DATABASE_PORT'), #os.environ['DATABASE_PORT'],
             'TEST': {
-                'NAME': 'sudoku', #os.environ['DATABASE_NAME']
+                'NAME': env('DATABASE_NAME'), #os.environ['DATABASE_NAME']
             }
         # 'default': {
         #     'ENGINE': 'django.db.backends.postgresql',
