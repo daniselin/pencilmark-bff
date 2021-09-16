@@ -11,5 +11,6 @@ urlpatterns = [
     path('hello/', views.HelloWorldView.as_view(), name='hello_world'),
     path('logout/', views.LogoutAndBlacklistRefreshTokenForUserView.as_view(), name='logout'),
     path('token/verify/', views.VerifyToken.as_view(), name='token_verify'),
-    path('puzzle/check', views.CheckPuzzle.as_view(), name='check_puzzle')
+    path('puzzle/check/', views.CheckPuzzle.as_view(), name='check_puzzle'),
+    path('profile/<str:username>/', views.GetProfile.as_view(), name='get_profile')
 ]

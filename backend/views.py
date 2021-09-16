@@ -1,5 +1,7 @@
 from django.core.exceptions import ValidationError
 from rest_framework import status, permissions
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 
 from .serializers import PuzzleSerializer
 from rest_framework.response import Response
@@ -10,7 +12,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import MyTokenObtainPairSerializer, CustomUserSerializer
 from .serializers import PuzzleSerializer
 
-import json
+from .models import Puzzle
 
 
 class ObtainTokenPairView(TokenObtainPairView):
@@ -87,6 +89,15 @@ class PuzzleCreate(APIView):
                 return Response({'message': error.message}, status=status.HTTP_409_CONFLICT)
 
         return Response({'message': serializer.errors}, status=status.HTTP_409_CONFLICT)
+
+
+class GetProfile(APIView):
+    def get(self, request, username):
+        user = get_object_or_404(get_user_model(), username=username)
+        createdPuzzles = PuzzleSerializer(Puzzle.objects.filter(creator=user.id).filter(completed=True), many=True)
+        savedPuzzles = PuzzleSerializer(Puzzle.objects.filter(creator=user.id).filter(completed=False), many=True)
+
+        return Response({'savedPuzzles': savedPuzzles.data, 'createdPuzzles': createdPuzzles.data, 'profile': user.id}, status=status.HTTP_200_OK)
 
 
 class CheckPuzzle(APIView):
