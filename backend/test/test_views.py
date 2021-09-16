@@ -86,7 +86,6 @@ class PuzzleTestCase(TestCase):
     def test_create_puzzle_required_fields(self):
         user = CustomUser.objects.get(username='testName')
         response = self.client.post('/api/puzzle/create/', {})
-        print(response.data)
         self.assertEqual(response.data['name'][0].code, 'required')
         self.assertEqual(response.data['creator'][0].code, 'required')
         self.assertEqual(response.data['date'][0].code, 'required')

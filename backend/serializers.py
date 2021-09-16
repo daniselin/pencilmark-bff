@@ -74,7 +74,7 @@ class PuzzleSerializer(serializers.ModelSerializer):
         creator = data['creator']
 
         if Puzzle.objects.filter(name=name).filter(creator=creator).exists():
-            raise serializers.ValidationError("Email duplicate")
+            raise serializers.ValidationError("Puzzle name already exists for this creator.")
         return data
 
     def get_validation_exclusions(self):

@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from rest_framework import status, permissions
 
 from .serializers import PuzzleSerializer
@@ -8,6 +9,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import MyTokenObtainPairSerializer, CustomUserSerializer
 from .serializers import PuzzleSerializer
+
+import json
 
 
 class ObtainTokenPairView(TokenObtainPairView):
@@ -80,7 +83,76 @@ class PuzzleCreate(APIView):
                 if puzzle:
                     json = serializer.data
                     return Response(json, status=status.HTTP_201_CREATED)
-            except Exception as error:
-                return Response({'error': 'puzzle name duplicate'}, status=status.HTTP_409_CONFLICT)
+            except ValidationError as error:
+                return Response({'message': error.message}, status=status.HTTP_409_CONFLICT)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': serializer.errors}, status=status.HTTP_409_CONFLICT)
+
+
+class CheckPuzzle(APIView):
+    def post(self, request):
+        cells = request.data["cells"]
+        if len(cells) != 81:
+            return Response({'error': 'cells length incorrect: ' + str(len(cells))}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            conflictCells = []
+            for i in range(len(cells)):
+                iCell = cells[i]
+                iRow = i % 9 + 1
+                iCol = i // 9 + 1
+                iBox = 0
+                if iCol < 4:
+                    iBox = 1
+                elif iCol < 7:
+                    iBox = 4
+                elif iCol < 10:
+                    iBox = 7
+                if iRow < 4:
+                    iBox
+                elif iRow < 7:
+                    iBox += 1
+                elif iRow < 10:
+                    iBox += 2
+
+                iCellObj = {"row": iRow, "col": iCol}
+
+
+                for j in range(len(cells)):
+                    jCell = cells[j]
+                    jRow = j % 9 + 1
+                    jCol = j // 9 + 1
+                    jBox = 0
+                    if jCol < 4:
+                        jBox = 1
+                    elif jCol < 7:
+                        jBox = 4
+                    elif jCol < 10:
+                        jBox = 7
+                    if jRow < 4:
+                        jBox
+                    elif jRow < 7:
+                        jBox += 1
+                    elif jRow < 10:
+                        jBox += 2
+
+                    jCellObj = {"row": jRow, "col": jCol}
+
+                    if i != j:
+                        if iRow == jRow and iCell != "_" and iCell == jCell:
+                            if iCellObj not in conflictCells:
+                                conflictCells.append(iCellObj)
+                            if jCellObj not in conflictCells:
+                                conflictCells.append(jCellObj)
+
+                        if iCol == jCol and iCell != "_" and iCell == jCell:
+                            if iCellObj not in conflictCells:
+                                conflictCells.append(iCellObj)
+                            if jCellObj not in conflictCells:
+                                conflictCells.append(jCellObj)
+
+                        if iBox == jBox and iCell != "_" and iCell == jCell:
+                            if iCellObj not in conflictCells:
+                                conflictCells.append(iCellObj)
+                            if jCellObj not in conflictCells:
+                                conflictCells.append(jCellObj)
+            return Response({"conflictCells": conflictCells}, status=status.HTTP_200_OK)
