@@ -93,6 +93,25 @@ CORS_ORIGIN_WHITELIST = (
     'http://pencilmark.herokuapp.com'
 )
 
+CORS_ALLOW_METHODS = (
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS'
+)
+
+CORS_ALLOW_HEADERS = (
+    'Access-Control-Allow-Origin',
+    'x-requested-with',
+    'content-type',
+    'accept',
+    'origin',
+    'authorization',
+    'x-csrftoken'
+)
+
 CSRF_COOKIE_NAME = "csrftoken"
 
 ROOT_URLCONF = 'pencilmark.urls'
