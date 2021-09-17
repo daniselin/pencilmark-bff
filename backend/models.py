@@ -9,6 +9,7 @@ class Puzzle(models.Model):
     creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     date = models.DateField()
     given_digits = models.CharField(max_length=81)
+    solution_digits = models.CharField(max_length=81)
     cell_colors = models.CharField(max_length=81)
     average_solve_time = models.TimeField(auto_now=False, auto_now_add=False, blank=True)
     completed = models.BooleanField()

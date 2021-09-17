@@ -50,6 +50,7 @@ class PuzzleSerializer(serializers.ModelSerializer):
     creator = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), required=True)
     date = serializers.DateField(required=True)
     given_digits = serializers.CharField(required=True)
+    solution_digits = serializers.CharField(required=True)
     cell_colors = serializers.CharField(required=True)
     average_solve_time = serializers.TimeField(required=False)
     completed = serializers.BooleanField(required=True)
@@ -60,7 +61,7 @@ class PuzzleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Puzzle
         fields = (
-            'name', 'creator', 'date', 'given_digits', 'cell_colors', 'average_solve_time', 'completed', 'rule_set',
+            'name', 'creator', 'date', 'given_digits', 'solution_digits', 'cell_colors', 'average_solve_time', 'completed', 'rule_set',
             'average_rating', 'diagonals')
 
     def create(self, validated_data):
@@ -72,9 +73,12 @@ class PuzzleSerializer(serializers.ModelSerializer):
     def validate(self, data):
         name = data['name']
         creator = data['creator']
+        given_digits = data['given_digits']
 
         if Puzzle.objects.filter(name=name).filter(creator=creator).exists():
             raise serializers.ValidationError("Puzzle name already exists for this creator.")
+        if Puzzle.objects.filter(name=name).filter(given_digits=given_digits).exists():
+            raise serializers.ValidationError("Puzzle already exists for this creator.")
         return data
 
     def get_validation_exclusions(self):

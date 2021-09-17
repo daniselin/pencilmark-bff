@@ -97,7 +97,7 @@ class GetProfile(APIView):
         createdPuzzles = PuzzleSerializer(Puzzle.objects.filter(creator=user.id).filter(completed=True), many=True)
         savedPuzzles = PuzzleSerializer(Puzzle.objects.filter(creator=user.id).filter(completed=False), many=True)
 
-        return Response({'savedPuzzles': savedPuzzles.data, 'createdPuzzles': createdPuzzles.data, 'profile': user.id}, status=status.HTTP_200_OK)
+        return Response({'savedPuzzles': savedPuzzles.data, 'createdPuzzles': createdPuzzles.data, 'profile': {'id': user.id, 'username': user.username, 'score': user.score, 'email': user.email}}, status=status.HTTP_200_OK)
 
 
 class CheckPuzzle(APIView):
