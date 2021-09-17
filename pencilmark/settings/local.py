@@ -90,6 +90,7 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
+    'https://pencilmark.herokuapp.com',
     'http://pencilmark.herokuapp.com'
 )
 
