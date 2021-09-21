@@ -6,6 +6,23 @@ on:
   pull_request:
     branches: [ main ]
 
+services:
+  db_service:
+    image: postgres
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+    # Set health checks to wait until postgres has started
+    options: >-
+      --health-cmd pg_isready
+      --health-interval 10s
+      --health-timeout 5s
+      --health-retries 5
+    ports:
+      # Maps tcp port 5432 on service container to the host
+      - 5432:5432
+
 jobs:
   build:
 
@@ -38,3 +55,10 @@ jobs:
     - name: Run Tests
       run: |
         pipenv run python manage.py test
+      env:
+        TEST_DB_HOST: localhost
+        TEST_DB_NAME: postgres
+        TEST_DB_PASS: postgres
+        TEST_DB_PORT: 5432
+        TEST_DB_USER: postgres
+
