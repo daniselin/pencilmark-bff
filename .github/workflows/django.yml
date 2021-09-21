@@ -64,5 +64,5 @@ jobs:
         TEST_DB_PASS: postgres
         TEST_DB_PORT: 5432
         TEST_DB_USER: postgres
-        SECRET_KEY: %o*+8k#(i=zxm=qcpd^%q9%*h6ot84&usmo0^v^k&xop5*+idy
+        SECRET_KEY: MYSECRETKEY
 
