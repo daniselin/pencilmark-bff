@@ -82,6 +82,9 @@ class PuzzleCreate(APIView):
         if serializer.is_valid():
             try:
                 puzzle = serializer.save()
+                loaded_puzzle = request.data["loaded_puzzle"]
+                if loaded_puzzle:
+                    Puzzle.objects.get(pk=loaded_puzzle).delete()
                 if puzzle:
                     json = serializer.data
                     return Response(json, status=status.HTTP_201_CREATED)

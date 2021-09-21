@@ -65,32 +65,42 @@ class PuzzleTestCase(TestCase):
             'date': '2021-09-05',
             'given_digits': '000000001000000002000000003000000004000000005000000006000000007000000008000000009',
             'cell_colors': '000000001000000002000000003000000004000000005000000006000000007000000008000000009',
+            'solution_digits': '000000001000000002000000003000000004000000005000000006000000007000000008000000009',
             'completed': True,
+            'average_solve_time': '0:0:0',
+            'average_rating': 11,
             'rule_set': 'Regular sudoku rules apply.',
-            'diagonals': 0
-          })
+            'diagonals': 0,
+            'loaded_puzzle': 0
+          }, format='json')
         response = self.client.post('/api/puzzle/create/', {
             'name': 'testName',
             'creator': user.pk,
             'date': '2021-09-06',
             'given_digits': '100000001000000002000000003000000004000000005000000006000000007000000008000000009',
+            'solution_digits': '100000001000000002000000003000000004000000005000000006000000007000000008000000009',
             'cell_colors': '200000001000000002000000003000000004000000005000000006000000007000000008000000009',
             'completed': True,
+            'average_solve_time': '0:0:0',
+            'average_rating': 11,
             'rule_set': 'Regular sudoku rules apply.',
-            'diagonals': 1
-          })
+            'diagonals': 1,
+            'loaded_puzzle': 0
+          }, format='json')
 
         self.assertEqual(response.status_code, 409)
-        self.assertEqual(response.data['error'], 'puzzle name duplicate')
+        print(response.data['message'])
+        self.assertEqual(str(response.data['message']['non_field_errors'][0]), 'Puzzle name already exists for this creator.')
 
     def test_create_puzzle_required_fields(self):
         user = CustomUser.objects.get(username='testName')
         response = self.client.post('/api/puzzle/create/', {})
-        self.assertEqual(response.data['name'][0].code, 'required')
-        self.assertEqual(response.data['creator'][0].code, 'required')
-        self.assertEqual(response.data['date'][0].code, 'required')
-        self.assertEqual(response.data['given_digits'][0].code, 'required')
-        self.assertEqual(response.data['cell_colors'][0].code, 'required')
-        self.assertEqual(response.data['rule_set'][0].code, 'required')
-        self.assertEqual(response.data['diagonals'][0].code, 'required')
+        print(response)
+        self.assertEqual(response.data['message']['name'][0].code, 'required')
+        self.assertEqual(response.data['message']['creator'][0].code, 'required')
+        self.assertEqual(response.data['message']['date'][0].code, 'required')
+        self.assertEqual(response.data['message']['given_digits'][0].code, 'required')
+        self.assertEqual(response.data['message']['cell_colors'][0].code, 'required')
+        self.assertEqual(response.data['message']['rule_set'][0].code, 'required')
+        self.assertEqual(response.data['message']['diagonals'][0].code, 'required')
 

@@ -2,6 +2,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from .models import CustomUser, Puzzle
 from django.db import transaction
+from django.db.models import Q
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -57,12 +58,13 @@ class PuzzleSerializer(serializers.ModelSerializer):
     rule_set = serializers.CharField(required=True)
     average_rating = serializers.FloatField(required=False)
     diagonals = serializers.IntegerField(required=True)
+    loaded_puzzle = serializers.IntegerField(required=False)
 
     class Meta:
         model = Puzzle
         fields = (
-            'name', 'creator', 'date', 'given_digits', 'solution_digits', 'cell_colors', 'average_solve_time', 'completed', 'rule_set',
-            'average_rating', 'diagonals')
+            'id', 'name', 'creator', 'date', 'given_digits', 'solution_digits', 'cell_colors', 'average_solve_time', 'completed', 'rule_set',
+            'average_rating', 'diagonals', 'loaded_puzzle')
 
     def create(self, validated_data):
         instance = self.Meta.model(**validated_data)
@@ -74,11 +76,22 @@ class PuzzleSerializer(serializers.ModelSerializer):
         name = data['name']
         creator = data['creator']
         given_digits = data['given_digits']
+        loaded_puzzle = data['loaded_puzzle']
 
-        if Puzzle.objects.filter(name=name).filter(creator=creator).exists():
+        same_puzzle_name = Puzzle.objects.filter(name=name)
+
+        if same_puzzle_name.filter(creator=creator).filter(completed=True).exists():
             raise serializers.ValidationError("Puzzle name already exists for this creator.")
-        if Puzzle.objects.filter(name=name).filter(given_digits=given_digits).exists():
-            raise serializers.ValidationError("Puzzle already exists for this creator.")
+        if same_puzzle_name.filter(creator=creator).filter(completed=False).filter(~Q(pk=loaded_puzzle)):
+            raise serializers.ValidationError("Puzzle name already exists for this creator.")
+        if data["completed"]:
+            if same_puzzle_name.filter(given_digits=given_digits).filter(completed=True).exists():
+                raise serializers.ValidationError("Puzzle already exists for this creator.")
+        else:
+            if same_puzzle_name.filter(given_digits=given_digits).exists():
+                raise serializers.ValidationError("Puzzle already exists for this creator.")
+
+        data.pop('loaded_puzzle')
         return data
 
     def get_validation_exclusions(self):
